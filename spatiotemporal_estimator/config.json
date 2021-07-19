@@ -1,0 +1,10 @@
+{
+    "anthropometry_data": "C:/Users/Sergio/Desktop/dataset/anthropometry.xlsx",
+    "summary_data": "C:/Users/Sergio/Desktop/dataset/summary.xlsx",
+    "data": "C:/Users/Sergio/Desktop/dataset/optitrack",
+    "records": {
+        "subject_02": [
+            "rec_01"
+        ]
+    }
+}
