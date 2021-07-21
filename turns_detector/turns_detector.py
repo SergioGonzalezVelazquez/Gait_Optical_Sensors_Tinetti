@@ -165,9 +165,6 @@ def find_turns(cdg, events, left_events, right_events, out_dir, subject, record)
 def load_cdg(cdg_path):
     cdg = pd.read_csv(cdg_path, sep=";", decimal=",")
 
-    cdg.drop(cdg[cdg["CDG Z"] > 600].index, inplace=True)
-    cdg.drop(cdg[cdg["CDG Z"] < -600].index, inplace=True)
-
     # FIX TO BUG
     if len(cdg.columns) > 4:
         cols_to_drop = []
@@ -182,6 +179,10 @@ def load_cdg(cdg_path):
     
         # Overwrite file
         cdg.to_csv(cdg_path, sep=";", decimal=",", index=False)
+    
+    
+    cdg.drop(cdg[cdg["CDG Z"] > 600].index, inplace=True)
+    cdg.drop(cdg[cdg["CDG Z"] < -600].index, inplace=True)
 
     return cdg
 
@@ -223,7 +224,7 @@ def main():
     for subject in records.keys():
         logger("Process " + subject)
         for record_id in records[subject]:
-
+            logger("Record " + record_id)
             turns, left_filter, right_filter = process_record(config_file["data"], subject, record_id, output_file)
             # Add one to start in 1
             left_filter = [x+1 for x in left_filter]
