@@ -1,26 +1,9 @@
 {
-    "dataset": "D:/dataset/optitrack",
-    "stride_filtering_output": "D:/dataset/optitrack/stride_filtering.xlsx",
+    "anthropometry_data": "C:/Users/Sergio/Documents/notebooks/datos/dataset/anthropometry.xlsx",
+    "summary_data": "C:/Users/Sergio/Documents/notebooks/datos/dataset/summary.xlsx",
+    "turns_filtering": "C:/Users/Sergio/Documents/notebooks/datos/dataset/optitrack/turns_stride_filtering.xlsx",
+    "data": "C:/Users/Sergio/Documents/notebooks/datos/dataset/optitrack",
     "records": {
-        "subject_01": [
-            "rec_01",
-            "rec_02",
-            "rec_03",
-            "rec_04",
-            "rec_05",
-            "rec_06",
-            "rec_07",
-            "rec_08",
-            "rec_09",
-            "rec_10",
-            "rec_11",
-            "rec_12",
-            "rec_13",
-            "rec_14",
-            "rec_15",
-            "rec_16",
-            "rec_17"
-        ],
         "subject_02": [
             "rec_01",
             "rec_02",
@@ -76,7 +59,11 @@
             "rec_14",
             "rec_15",
             "rec_16",
-            "rec_17"
+            "rec_17",
+            "rec_18",
+            "rec_19",
+            "rec_20",
+            "rec_21"
         ],
         "subject_05": [
             "rec_01",
@@ -171,7 +158,11 @@
             "rec_14",
             "rec_15",
             "rec_16",
-            "rec_17"
+            "rec_17",
+            "rec_18",
+            "rec_19",
+            "rec_20",
+            "rec_21"
         ],
         "subject_10": [
             "rec_01",
@@ -190,7 +181,11 @@
             "rec_14",
             "rec_15",
             "rec_16",
-            "rec_17"
+            "rec_17",
+            "rec_18",
+            "rec_19",
+            "rec_20",
+            "rec_21"
         ]
     }
 }

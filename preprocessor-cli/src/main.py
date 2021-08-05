@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
 from utils import *
 from turns_detector import TurnsDetector
+from kinematics import KinematicsProcessor
 from spatiotemporal_estimator import SpatioTemporalEstimator
+from final_filtering import FinalFiltering
 import json
 import sys
 
@@ -26,10 +28,20 @@ def main():
 
     # Step 2: Estimate spatio-temporal parameters
     spatiotemporal_estimator = SpatioTemporalEstimator(config["dataset"], config["records"], config["stride_filtering_output"])
-    spatiotemporal_estimator.run()
+    spatiotemporal_estimator.find_outliers()
     logger("Spatio-temporal estimator completed")
 
     # Step 3: Parse kinematics files
+    kinematics_processor = KinematicsProcessor(config["dataset"], config["records"], config["stride_filtering_output"])
+    kinematics_processor.run()
+    logger("Kinematics filtering completed")
+
+    # Step 4: Generate final filtering combining previous info
+    FinalFiltering(config["stride_filtering_output"]).run()
+
+    # Step 5: Generate processed files with filtered strides
+    spatiotemporal_estimator.generate_filtered_resume()
+    kinematics_processor.generate_filtered_resume()
 
     logger("Preprocessing completed")
 
