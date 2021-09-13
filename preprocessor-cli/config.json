@@ -1,6 +1,24 @@
 {
-    "dataset": "D:/dataset/optitrack",
-    "stride_filtering_output": "D:/dataset/optitrack/stride_filtering.xlsx",
+    "dataset": "D:/OneDrive - UNED/Master-Compartido/PROTOCOLO_RECOGIDA/dataset/optitrack",
+    "stride_filtering_output": "D:/OneDrive - UNED/Master-Compartido/PROTOCOLO_RECOGIDA/dataset/optitrack/stride_filtering.xlsx",
+    "kinematics_filtering_threshold": {
+        "pelvis_tilt": {
+            "min": -30,
+            "max": 60
+        },
+        "hip_flex_ext": {
+            "min": -45,
+            "max": 60
+        },
+        "knee_flex_ext": {
+            "min": -30,
+            "max": 90
+        },
+        "ankle_flex_ext": {
+            "min": -45,
+            "max": 60
+        }
+    },
     "records": {
         "subject_01": [
             "rec_01",
