@@ -11,12 +11,17 @@ from utils import *
 class TurnsDetector:
     '''TODO'''
 
-    def __init__(self, dataset_path, records, output):
+    def __init__(self, dataset_path, records, output, enable_logger=True):
         self.dataset = dataset_path
         self.records = records
         self.output = output
+        self.enable_logger = enable_logger
         self.turn_list = []
         self.errors = []
+
+    def log(self, text, msgType=LoggerType.OKGREEN):
+        if self.enable_logger:
+            logger(text, msgType=msgType)
 
     def process_record(self, dataset, subject_id, record_id, output_file):
         '''TODO'''
@@ -186,13 +191,13 @@ class TurnsDetector:
 
     def run(self):
         '''TODO'''
-        logger("[Turns Detector] Start", msgType=LoggerType.OKBLUE)
+        self.log("[Turns Detector] Start", msgType=LoggerType.OKBLUE)
 
         for subject in self.records.keys():
-            logger("[Turns Detector] Process " +
+            self.log("[Turns Detector] Process " +
                    subject, msgType=LoggerType.OKBLUE)
             for record_id in self.records[subject]:
-                logger("[Turns Detector] Record " +
+                self.log("[Turns Detector] Record " +
                        record_id, msgType=LoggerType.OKBLUE)
                 turns, left_filter, right_filter = self.process_record(
                     self.dataset, subject, record_id, self.output)
@@ -202,5 +207,5 @@ class TurnsDetector:
         turns_table = pd.DataFrame(self.turn_list, columns=[
                                    "Subject", "Record", "Turns_Count", "Turns_Left_Strides_Filtering", "Turns_Right_Strides_Filtering"])
         turns_table.to_excel(self.output, index=False)
-        logger("[Turns Detector] Errors count " +
+        self.log("[Turns Detector] Errors count " +
                str(len(self.errors)), msgType=LoggerType.OKBLUE)

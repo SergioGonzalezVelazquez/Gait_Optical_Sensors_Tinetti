@@ -11,14 +11,19 @@ import os
 class KinematicsProcessor:
     '''TODO'''
 
-    def __init__(self, dataset_path, records, filtering, filtering_threshold):
+    def __init__(self, dataset_path, records, filtering, filtering_threshold, enable_logger=True):
         '''TODO'''
         self.dataset = dataset_path
         self.records = records
         self.filtering_path = filtering
         self.stride_filtering = None
+        self.enable_logger= enable_logger
         self.kinematics_data = {}
         self.kinematics_filtering_threshold = filtering_threshold
+
+    def log(self, text, msgType=LoggerType.OKGREEN):
+        if self.enable_logger:
+            logger(text, msgType=msgType)
 
     def load_stride_filtering(self, add_kinematics=True):
         '''TODO'''
@@ -158,10 +163,10 @@ class KinematicsProcessor:
         self.load_stride_filtering()
 
         for subject in self.records.keys():
-            logger("[Kinematics] Process " + subject,
+            self.log("[Kinematics] Process " + subject,
                    msgType=LoggerType.OKBLUE)
             for record_id in self.records[subject]:
-                logger("[Kinematics] Record " + record_id,
+                self.log("[Kinematics] Record " + record_id,
                        msgType=LoggerType.OKBLUE)
                 result = self.process_record(self.dataset, subject, record_id)
                 if result < 0:
@@ -206,10 +211,10 @@ class KinematicsProcessor:
         self.load_stride_filtering(add_kinematics=False)
         rows = []
         for subject in self.records.keys():
-            logger("[Kinematics] Generate filtered resume " +
+            self.log("[Kinematics] Generate filtered resume " +
                    subject, msgType=LoggerType.OKBLUE)
             for record_id in self.records[subject]:
-                logger("[Kinematics] Record " + record_id,
+                self.log("[Kinematics] Record " + record_id,
                        msgType=LoggerType.OKBLUE)
                     
                 

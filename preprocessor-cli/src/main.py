@@ -27,7 +27,7 @@ def main():
 
     # Step 1: Run turns-detector
     turns_detector = TurnsDetector(config["dataset"], config["records"], config["stride_filtering_output"])
-    #turns_detector.run()
+    turns_detector.run()
     logger("Turns detector completed")
 
     # Step 2: Estimate spatio-temporal parameters

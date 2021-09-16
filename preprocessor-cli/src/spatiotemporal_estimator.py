@@ -12,21 +12,25 @@ from scipy.signal import savgol_filter
 class SpatioTemporalEstimator:
     '''Class to handle all spatio-temporal parameter estimation'''
 
-    def __init__(self, dataset_path, records, filtering):
+    def __init__(self, dataset_path, records, filtering, enable_logger = True):
         self.dataset = dataset_path
         self.records = records
         self.filtering_path = filtering
         self.turn_list = []
         self.errors = []
         self.stride_filtering = None
+        self.enable_logger = enable_logger
         self.spatiotemporal_data = {}
         self.anthropometry = self.load_anthropometry_data()
 
+    def log(self, text, msgType=LoggerType.OKGREEN):
+        if self.enable_logger:
+            logger(text, msgType=msgType)
+
+
     def load_anthropometry_data(self):
         '''Load file with anthropometric characteristics'''
-        path = Path(self.dataset)
-        anthropometry_path = str(
-            path.parent.absolute()) + "/anthropometry.xlsx"
+        anthropometry_path = self.dataset + "/anthropometry.xlsx"
         return pd.read_excel(anthropometry_path, skipfooter=1)
 
     def load_stride_filtering(self, add_spatitemporal=True,):
@@ -380,26 +384,26 @@ class SpatioTemporalEstimator:
     def normalize_spatiotemporal(self, overview, subject_id):
         '''TODO'''
         norm_overview = {}
-        leg_length = self.anthropometry.loc[self.anthropometry.subject ==
+        height = self.anthropometry.loc[self.anthropometry.subject ==
                                             subject_id, "leg_length"].iloc[0]
         foot_length = self.anthropometry.loc[self.anthropometry.subject ==
                                              subject_id, "foot_length"].iloc[0]
 
-        norm_overview["Right_Stride_Length"] = overview["Right_Stride_Length"] / leg_length
-        norm_overview["Left_Stride_Length"] = overview["Left_Stride_Length"] / leg_length
-        norm_overview["Right_Step_Length"] = overview["Right_Step_Length"] / leg_length
-        norm_overview["Left_Step_Length"] = overview["Left_Step_Length"] / leg_length
-        norm_overview["Base_Of_Support"] = overview["Base_Of_Support"] / leg_length
+        norm_overview["Right_Stride_Length"] = overview["Right_Stride_Length"] / height
+        norm_overview["Left_Stride_Length"] = overview["Left_Stride_Length"] / height
+        norm_overview["Right_Step_Length"] = overview["Right_Step_Length"] / height
+        norm_overview["Left_Step_Length"] = overview["Left_Step_Length"] / height
+        norm_overview["Base_Of_Support"] = overview["Base_Of_Support"] / height
         norm_overview["Right_Heel_Height"] = overview["Right_Heel_Height"] / foot_length
         norm_overview["Left_Heel_Height"] = overview["Left_Heel_Height"] / foot_length
         norm_overview["Right_Toe_Height"] = overview["Right_Toe_Height"] / foot_length
         norm_overview["Left_Toe_Height"] = overview["Left_Toe_Height"] / foot_length
         norm_overview["Com_Vertical_Displacement"] = overview["Com_Vertical_Displacement"] / foot_length
-        norm_overview["Com_Horizontal_Displacement"] = overview["Com_Horizontal_Displacement"] / leg_length
+        norm_overview["Com_Horizontal_Displacement"] = overview["Com_Horizontal_Displacement"] / height
         norm_overview["Speed"] = overview["Speed"] / \
-            (math.sqrt(9.806 * leg_length))
+            (math.sqrt(9.806 * height))
         norm_overview["Cadence"] = overview["Cadence"] / \
-            (math.sqrt(9.806 / leg_length))
+            (math.sqrt(9.806 / height))
         norm_overview["Right_Stance_Phase_Duration"] = overview["Right_Stance_Phase_Duration"] / \
             overview["Right_Stride_Duration"]
         norm_overview["Right_Swing_Phase_Duration"] = overview["Right_Swing_Phase_Duration"] / \
@@ -598,7 +602,7 @@ class SpatioTemporalEstimator:
             self.spatiotemporal_data[subject_id + "_" +
                                      record_id]["temporal"]["right"] = right_strides_temporal_df
         except:
-            logger("temporal parameters for " + subject_id +
+            self.log("temporal parameters for " + subject_id +
                    " " + record_id, msgType=LoggerType.FAIL)
             return -1
 
@@ -613,7 +617,7 @@ class SpatioTemporalEstimator:
         self.spatiotemporal_data[subject_id + "_" +
                                  record_id]["spatial"]["right"] = right_strides_spatial_df
         # except:
-        #    logger("spatial parameters for " + subject_id +
+        #    self.log("spatial parameters for " + subject_id +
         #           " " + record_id, msgType=LoggerType.FAIL)
         #   return -1
 
@@ -632,10 +636,10 @@ class SpatioTemporalEstimator:
 
         # Estimate spatiotemporal parameters
         for subject in self.records.keys():
-            logger("[Spatiotemporal Estimator] Process " +
+            self.log("[Spatiotemporal Estimator] Process " +
                    subject, msgType=LoggerType.OKCYAN)
             for record_id in self.records[subject]:
-                logger("[Spatiotemporal Estimator] Record " +
+                self.log("[Spatiotemporal Estimator] Record " +
                        record_id, msgType=LoggerType.OKCYAN)
                 result = self.process_record(self.dataset, subject, record_id)
                 if result < 0:
@@ -675,10 +679,10 @@ class SpatioTemporalEstimator:
 
         rows = []
         for subject in self.records.keys():
-            logger("[Spatiotemporal] Generate filtered resume " +
+            self.log("[Spatiotemporal] Generate filtered resume " +
                    subject, msgType=LoggerType.OKCYAN)
             for record_id in self.records[subject]:
-                logger("[Spatiotemporal] Record " + record_id,
+                self.log("[Spatiotemporal] Record " + record_id,
                        msgType=LoggerType.OKCYAN)
 
                 # Create dir for filtered data
